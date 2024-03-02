@@ -1,6 +1,15 @@
 from bs4 import BeautifulSoup
 
-import re
+import re, httpx
+
+
+class Scraper():
+    def __init__(self):
+        self.session = httpx.Client()
+    
+    def get_html(self,url):
+        html = self.session.get(url).text
+        return html
 
 def check_url(url:str)->str:
     prefix = "https://www.amazon.com"
@@ -60,7 +69,8 @@ def find_tag(soup:BeautifulSoup,tag:str,class_name="",attr="")->str:
 
 def extract_html(html:str)->list[dict]:
     list_of_tag = find_tag_list(html)
-    all_data = [parse(item) for item in list_of_tag[0]]
+    all_data = [parse(item) for item in list_of_tag]
+    print(len(all_data))
     return all_data
 
 

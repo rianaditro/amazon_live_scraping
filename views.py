@@ -6,7 +6,7 @@ bp = Blueprint("main",__name__)
 
 @bp.route('/')
 def index():
-    return render_template("index.html")
+    return render_template("homepage.html")
 
 @bp.route('/scraping',methods=["GET","POST"])
 def scraping():

@@ -19,19 +19,7 @@
             </form>
         </div>
       </nav>   
-    <div class="container" style="padding: 150px;">
-        <div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
-            <form action="/scraping" method="post">
-                <h4>Find Amazon Product by your keyword</h4>
-                <div class="input-group input-group-lg">
-                    <input name="keyword" type="text" class="form-control" placeholder="Find something" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">
-                </div>
-                <div class="d-grid gap-2" style="padding-top: 15px;">
-                    <button type="submit" class="btn btn-dark btn-lg">Submit</button>
-                </div>
-            </form>
-        </div>
-    </div>
+    {% block homepage %} {% endblock %}
     <div class="container fixed-bottom">
         <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
           <div class="col-md-4 d-flex align-items-center">

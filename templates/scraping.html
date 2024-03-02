@@ -1,0 +1,12 @@
+<div class="container">
+    {%- for item in items %}
+    <div>
+        <div class="row">
+            <img src="{{ item['image'] }}" class="img-thumbnail" style="height: 250px;"></td>
+        </div>
+        <div class="row">
+            <a href="{{ item['product_url'] }}">{{ item[product_name] }}</a>
+        </div>
+    </div>
+    {%- endfor %}
+</div>

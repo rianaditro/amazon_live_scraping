@@ -70,19 +70,23 @@ def find_tag(soup:BeautifulSoup,tag:str,class_name="",attr="")->str:
 def extract_html(html:str)->list[dict]:
     list_of_tag = find_tag_list(html)
     all_data = [parse(item) for item in list_of_tag]
-    print(len(all_data))
     return all_data
 
+def keyword_to_url(str_input)->str:
+    text = str_input.replace(" ","+")
+    url = f"https://www.amazon.com/s?k={text}"
+    return url
+
+def main(keyword):
+    url = keyword_to_url(keyword)
+    scraper = Scraper()
+    html = scraper.get_html(url)
+    result = extract_html(html)
+    return result
 
 
 if __name__=="__main__":
-    with open("httpx.html") as file:
-        html1 = file.read()
+    keyword = input("Input keyword: ")
+    print(main(keyword))
 
-    with open("httpx-boots.html") as file:
-        html2 = file.read()
-
-    print(extract_html(html1))
-    print(extract_html(html2))
-    
     

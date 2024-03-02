@@ -32,28 +32,36 @@ def find_tag_list(html:str)->list[BeautifulSoup]:
         raise
     return item
 
-def parse(list_tag:list[BeautifulSoup]):
-    #for item in list_tag:
-    product = list_tag[0].find("a","a-link-normal s-underline-text s-underline-link-text s-link-style a-text-normal")
+def parse(soup:BeautifulSoup):
+    product = find_tag(soup,"a","a-link-normal s-underline-text s-underline-link-text s-link-style a-text-normal")
     product_name = product.text.strip()
-    product_url = product["href"]
-    return (product_name,product_url)
+    product_url = check_url(product["href"])
+    product_image = find_tag(soup,"img","s-image")["src"]
+    price = find_tag(soup,"span","a-offscreen").text.replace("$","")
+    rating = find_tag(soup,"div","a-row a-size-small").find("span")["aria-label"].replace(" out of 5 stars","")
+    return (product_name,product_url,product_image,price,rating)
+
+def find_tag(soup:BeautifulSoup,tag:str,class_name:str):
+    try:
+        tag = soup.find(tag,class_=class_name)
+    except:
+        tag = "tag doesn't exist"
+    return tag
+
+
 
 
 if __name__=="__main__":
+    with open("httpx.html") as file:
+        html1 = file.read()
 
-    url = "/Camera-Shy-Kay-Cove-ebook/dp/B0C7QYS91W/ref=sr_1_1?crid=85DM2WL0692G&dib=eyJ2IjoiMSJ9.Tf2Vy2x498pDapzMTCMs7EXp9X0hatZ_cD1qGsa3lOdKHyCbiTedaPIxOY2WBtGdq5MjKn_q_M1cGO51cubHX0z8a_elpJAjmHH_Cla6JpWn38FFrYuemzkR--WzePH7xj5V8twKPEZHqtV1Dj1R9KPIkgxOozzSeEhIrKY0CTSdLb4kiH1lIMcRlYSTiF-qVsiD8JN6z0SyisCI4bLUYbzE0T-l6qhbAclJjpIPRFw.bP2v4Ft8kwO2DaFIeXg_NaXq_p57YAyb5JVQeQGp7HM&dib_tag=se&keywords=camera&qid=1709346093&s=books&sprefix=camera%2Cstripbooks-intl-ship%2C317&sr=1-1"
-    print(check_url(url))
-    # with open("httpx.html") as file:
-    #     html1 = file.read()
+    with open("httpx-boots.html") as file:
+        html2 = file.read()
 
-    # with open("httpx-boots.html") as file:
-    #     html2 = file.read()
+    tag1 = find_tag_list(html1)[5]
+    print(parse(tag1))
 
-    # tag1 = find_tag_list(html1)
-    # print(parse(tag1))
-
-    # tag2= find_tag_list(html2)
-    # print(parse(tag2))
+    tag2= find_tag_list(html2)[5]
+    print(parse(tag2))
     
     

@@ -24,30 +24,44 @@ def find_tag_list(html:str)->list[BeautifulSoup]:
     class_16_data = "sg-col-20-of-24 s-result-item s-asin sg-col-0-of-12 sg-col-16-of-20 sg-col s-widget-spacing-small sg-col-12-of-16"
     class_48_data = "sg-col-4-of-24 sg-col-4-of-12 s-result-item s-asin sg-col-4-of-16 sg-col s-widget-spacing-small sg-col-4-of-20"
     if items.find_all("div",class_=class_16_data):
-        item = items.find_all("div",class_=class_16_data)
+        list_of_tag = items.find_all("div",class_=class_16_data)
     elif items.find_all("div",class_=class_48_data):
-        item = items.find_all("div",class_=class_48_data)
+        list_of_tag = items.find_all("div",class_=class_48_data)
     else:
         print("No tag class found")
         raise
+    return list_of_tag
+
+def parse(soup:BeautifulSoup)->dict:
+    product_name = find_tag(soup,"a","a-link-normal s-underline-text s-underline-link-text s-link-style a-text-normal")
+    product_url = find_tag(soup,"a","a-link-normal s-underline-text s-underline-link-text s-link-style a-text-normal","href")
+    product_image = find_tag(soup,"img","s-image","src")
+    price = find_tag(soup,"span","a-offscreen")
+    rating = soup.find("div","a-row a-size-small")
+    rating = find_tag(soup=rating,tag="span",attr="aria-label")
+    
+    item = {"product_name":product_name,
+            "price":price.replace("$",""),
+            "rating":rating.replace(" out of 5 stars",""),
+            "image":product_image,
+            "product_url":check_url(product_url)}
     return item
 
-def parse(soup:BeautifulSoup):
-    product = find_tag(soup,"a","a-link-normal s-underline-text s-underline-link-text s-link-style a-text-normal")
-    product_name = product.text.strip()
-    product_url = check_url(product["href"])
-    product_image = find_tag(soup,"img","s-image")["src"]
-    price = find_tag(soup,"span","a-offscreen").text.replace("$","")
-    rating = find_tag(soup,"div","a-row a-size-small").find("span")["aria-label"].replace(" out of 5 stars","")
-    return (product_name,product_url,product_image,price,rating)
-
-def find_tag(soup:BeautifulSoup,tag:str,class_name:str):
+def find_tag(soup:BeautifulSoup,tag:str,class_name="",attr="")->str:
     try:
         tag = soup.find(tag,class_=class_name)
-    except:
-        tag = "tag doesn't exist"
-    return tag
+        if attr == "":
+            text = tag.text.strip()
+        else:
+            text = tag[attr]
+    except AttributeError:
+        text = ""
+    return text
 
+def extract_html(html:str)->list[dict]:
+    list_of_tag = find_tag_list(html)
+    all_data = [parse(item) for item in list_of_tag[0]]
+    return all_data
 
 
 
@@ -58,10 +72,7 @@ if __name__=="__main__":
     with open("httpx-boots.html") as file:
         html2 = file.read()
 
-    tag1 = find_tag_list(html1)[5]
-    print(parse(tag1))
-
-    tag2= find_tag_list(html2)[5]
-    print(parse(tag2))
+    print(extract_html(html1))
+    print(extract_html(html2))
     
     

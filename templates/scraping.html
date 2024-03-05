@@ -1,8 +1,8 @@
 {% extends "index.html" %}
 {% block scraping %}
-<div class="container">
+<div class="container" style="padding-top:30px">
     <div class="dropdown">
-        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <a class="btn btn-dark dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
           Downloads
         </a>
         <ul class="dropdown-menu">
@@ -17,13 +17,13 @@
             {%- for item in items %}
             <div class="col" style="padding: 15px;">
                 <div class="row">
-                    <img src="{{ item['image'] }}" class="img-thumbnail" style="height: 250px;">
+                    <img src="{{ item['image'] }}" class="img-thumbnail" style="max-height: 250px;">
                 </div>
                 <div class="row">
-                    <a class="link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="{{ item['product_url'] }}">{{ item['product_name'][:80] }}...</a>
+                    <a class="link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="{{ item['product_url'] }}">{{ item['product_name'][:25] }}...</a>
                 </div>
                 <div class="row">
-                    Rating ({{ item['rating'] }})
+                    <p>Rating ({{ item['rating'] }})</p>
                 </div>
                 <div class="row">
                     <p>Price ${{ item['price'] }}</p>

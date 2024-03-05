@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 
-import re, httpx
+import re, httpx, pandas
 
 
 class Scraper():
@@ -8,7 +8,9 @@ class Scraper():
         self.session = httpx.Client()
     
     def get_html(self,url):
-        html = self.session.get(url).text
+        r = self.session.get(url)
+        print(r.status_code)
+        html = r.text
         return html
 
 def check_url(url:str)->str:
@@ -83,6 +85,17 @@ def main(keyword):
     html = scraper.get_html(url)
     result = extract_html(html)
     return result
+
+def download(format_file, file):
+    if format_file == "csv":
+        df = pandas.DataFrame(file)
+        filename = "result.csv"
+        df.to_csv(filename,index=False)
+    elif format_file == "excel":
+        df = pandas.DataFrame(file)
+        filename = "result.xlsx"
+        df.to_excel(filename, index=False)
+    print(f"saved to {filename}")
 
 
 if __name__=="__main__":

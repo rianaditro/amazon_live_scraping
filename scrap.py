@@ -84,7 +84,6 @@ def main(keyword):
     scraper = Scraper()
     html = scraper.get_html(url)
     result = extract_html(html)
-    return result
 
 def download(format_file, file):
     if format_file == "csv":
